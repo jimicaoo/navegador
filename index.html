@@ -1,1 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Início</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #ffffff;
+    --ink-soft: rgba(255,255,255,0.72);
+    --panel: rgba(6,16,40,0.72);
+    --panel-line: rgba(150,185,255,0.24);
+    --accent: #1d4ed8;
+    --accent-grad: linear-gradient(135deg, #2f63e8, #173a9e);
+    --glass: linear-gradient(135deg, rgba(45,90,190,0.34), rgba(6,16,40,0.72) 55%, rgba(22,56,130,0.30));
+    --accent-hi: #7ea2ee;
+    --amber: #ffd166;
+    --danger: #ff5d6c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #030812;
+    color: var(--ink);
+    font-family: "Sora", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
 
+  /* ---------- Vídeo de fundo (sem esticar: mantém proporção e cobre a tela) ---------- */
+  #bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    background: #030812;
+  }
+  #shade {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+    background: rgba(2,8,24,0.42);
+  }
+
+  /* ---------- Conteúdo ---------- */
+  #page {
+    position: relative;
+    z-index: 2;
+    min-height: 100%;
+    padding: 56px 24px 64px;
+    display: flex;
+    justify-content: center;
+  }
+  #card {
+    width: 100%;
+    max-width: 1000px;
+  }
+  h1 {
+    margin: 0 0 28px;
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.6);
+  }
+
+  .bar {
+    display: flex;
+    align-items: stretch;
+    background: var(--glass);
+    border: 1px solid var(--panel-line);
+    border-radius: 22px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 34px rgba(0,4,16,0.45);
+    padding: 10px;
+  }
+  .bar input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 24px;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    outline: none;
+    padding: 12px 16px;
+  }
+  .bar input::placeholder { color: var(--ink-soft); }
+
+  .btn {
+    font: inherit;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--ink);
+    background: rgba(120,160,255,0.14);
+    border: 2px solid rgba(170,200,255,0.2);
+    border-radius: 14px;
+    padding: 0 20px;
+    margin-left: 8px;
+    min-height: 60px;
+    cursor: pointer;
+  }
+  .btn.go { background: var(--accent-grad); font-size: 28px; padding: 0 28px; }
+  .btn.txt { font-size: 20px; font-weight: 600; }
+  .btn.on { background: rgba(29,78,216,0.5); border-color: var(--accent-hi); }
+  .btn:focus, .btn:hover,
+  .bar input:focus,
+  a.link:focus, a.link:hover {
+    outline: none;
+    border-color: var(--amber);
+    box-shadow: 0 0 0 4px rgba(255,209,102,0.5);
+  }
+  .bar:focus-within { border-color: var(--accent-hi); }
+
+  /* ---------- Seções ---------- */
+  .section { margin-top: 28px; }
+  .section h2 {
+    margin: 0 0 12px 4px;
+    font-size: 24px;
+    font-weight: 600;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .item {
+    display: flex;
+    align-items: stretch;
+    background: var(--glass);
+    border: 1px solid var(--panel-line);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 6px 22px rgba(0,4,16,0.35);
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  a.link {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 20px;
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .btn.act {
+    font-size: 18px;
+    font-weight: 700;
+    min-height: 52px;
+    padding: 0 18px;
+  }
+  .btn.del { color: #ff8a95; background: rgba(255,93,108,0.18); }
+  .btn.edit { color: var(--accent-hi); }
+  .btn.ok { background: var(--accent-grad); }
+  .edit-input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 20px;
+    color: var(--ink);
+    background: rgba(120,160,255,0.10);
+    border: 2px solid var(--accent-hi);
+    border-radius: 10px;
+    outline: none;
+    padding: 12px 16px;
+  }
+  .edit-input:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 4px rgba(255,209,102,0.5);
+  }
+  .empty {
+    color: var(--ink-soft);
+    font-size: 18px;
+    padding: 6px 4px;
+  }
+  .hidden { display: none; }
+  #toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    z-index: 5;
+    background: rgba(6,16,40,0.96);
+    border: 1px solid var(--panel-line);
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+  .btn.star { color: var(--amber); padding: 0 16px; }
+  .btn.star svg { display: block; }
+  .btn.star.on { background: rgba(255,209,102,0.16); }
+
+  /* ---------- Tela de conexão / erro ---------- */
+  #err {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10;
+    background: rgba(2,8,24,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  #err.show { display: flex; }
+  #errBox {
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    background: rgba(8,22,52,0.97);
+    border: 1px solid var(--panel-line);
+    border-radius: 28px;
+    padding: 44px 36px 36px;
+  }
+  #errBox h2 { margin: 18px 0 10px; font-size: 32px; font-weight: 700; }
+  #errMsg { margin: 0 auto 14px; max-width: 520px; font-size: 19px; line-height: 1.5; color: var(--ink-soft); }
+  #errUrl {
+    margin: 0 0 28px;
+    font-size: 16px;
+    color: var(--accent-hi);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #errBtns .btn { margin: 0 6px 10px; min-height: 56px; font-size: 20px; font-weight: 600; }
+  #errBtns .btn.primary { background: var(--accent-grad); }
+</style>
+</head>
+<body>
+
+<video id="bg" muted playsinline autoplay preload="auto"></video>
+<div id="shade"></div>
+
+<div id="page">
+  <div id="card">
+    <h1>Para onde vamos?</h1>
+
+    <div class="bar">
+      <input id="url" type="text" value="https://" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Endereço do site">
+      <button class="btn go" id="btnGo" title="Ir" aria-label="Ir">🚀</button>
+      <button class="btn" id="btnFav" title="Adicionar aos favoritos" aria-label="Adicionar aos favoritos">⭐</button>
+      <button class="btn txt" id="btnHist" aria-label="Histórico">🕘 Histórico</button>
+    </div>
+
+    <div class="section hidden" id="histSection">
+      <h2>Histórico</h2>
+      <ul class="list" id="histList"></ul>
+    </div>
+
+    <div class="section" id="favSection">
+      <h2>Favoritos</h2>
+      <ul class="list" id="favList"></ul>
+    </div>
+  </div>
+</div>
+
+<div id="err">
+  <div id="errBox">
+    <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M2 8.8a15 15 0 0 1 20 0"/>
+      <path d="M5 12.5a10 10 0 0 1 14 0"/>
+      <path d="M8.5 16a5 5 0 0 1 7 0"/>
+      <circle cx="12" cy="19.6" r="0.7" fill="#ffd166"/>
+      <path id="errSlash" d="M3.5 3.5l17 17"/>
+    </svg>
+    <h2 id="errTitle"></h2>
+    <p id="errMsg"></p>
+    <p id="errUrl"></p>
+    <div id="errBtns">
+      <button class="btn primary" id="errRetry" type="button">Tentar novamente</button>
+      <button class="btn" id="errForce" type="button">Abrir mesmo assim</button>
+      <button class="btn" id="errBack" type="button">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  var KEY_FAV = "ps5home_favoritos";
+  var KEY_HIST = "ps5home_historico";
+  var KEY_SEED = "ps5home_seed_v2";
+  var DEFAULT_FAVS = [
+    "https://nexgen999.github.io/ps5webkit",
+    "https://jordyidk.github.io/slopkit/",
+    "https://soniciso1.github.io/relapse/"
+  ];
+  var HIST_MAX = 50;
+
+  /* ---------- Armazenamento persistente (localStorage com reserva em memória) ---------- */
+  var memory = {};
+  function save(key, value) {
+    var s = JSON.stringify(value);
+    try { window.localStorage.setItem(key, s); } catch (e) { memory[key] = s; }
+  }
+  function load(key, fallback) {
+    var s = null;
+    try { s = window.localStorage.getItem(key); } catch (e) { s = memory[key] || null; }
+    if (!s) return fallback;
+    try { return JSON.parse(s); } catch (e2) { return fallback; }
+  }
+
+  var favs = load(KEY_FAV, []);
+  var hist = load(KEY_HIST, []);
+
+  // Favoritos pré-adicionados: entram uma única vez (depois podem ser excluídos)
+  if (!load(KEY_SEED, false)) {
+    var add = [];
+    for (var d = 0; d < DEFAULT_FAVS.length; d++) {
+      if (favs.indexOf(DEFAULT_FAVS[d]) === -1) add.push(DEFAULT_FAVS[d]);
+    }
+    favs = add.concat(favs);
+    save(KEY_FAV, favs);
+    save(KEY_SEED, true);
+  }
+
+  /* ---------- Elementos ---------- */
+  function $(id) { return document.getElementById(id); }
+  var input = $("url"), favList = $("favList"), histList = $("histList");
+  var histSection = $("histSection"), btnHist = $("btnHist");
+  var editing = { fav: -1, hist: -1 };
+
+  /* ---------- Utilidades ---------- */
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.className = "show";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.className = ""; }, 2200);
+  }
+
+  function normalize(raw) {
+    var u = (raw || "").replace(/^\s+|\s+$/g, "");
+    if (!u || u === "https://" || u === "http://") return "";
+    if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+    return u;
+  }
+
+  function listOf(kind) { return kind === "fav" ? favs : hist; }
+  function persist(kind) { save(kind === "fav" ? KEY_FAV : KEY_HIST, listOf(kind)); }
+
+  function addHistory(url) {
+    var out = [url], i;
+    for (i = 0; i < hist.length; i++) {
+      if (hist[i] !== url) out.push(hist[i]);
+    }
+    hist = out.slice(0, HIST_MAX);
+    save(KEY_HIST, hist);
+  }
+
+  function proceed(url) {
+    addHistory(url);
+    window.location.href = url;
+  }
+
+  /* ---------- Tela de conexão / erro ---------- */
+  var err = $("err"), errTitle = $("errTitle"), errMsg = $("errMsg"), errUrl = $("errUrl");
+  var errRetry = $("errRetry"), errForce = $("errForce"), errBack = $("errBack"), errSlash = $("errSlash");
+  var probeTimer = null, probeToken = 0, currentUrl = "";
+
+  function showErr(mode, url) {
+    currentUrl = url;
+    errUrl.textContent = url;
+    err.className = "show";
+    var failed = mode === "fail";
+    errSlash.style.display = failed ? "" : "none";
+    errTitle.textContent = failed ? "Sem conexão com a internet" : "Conectando…";
+    errMsg.textContent = failed
+      ? "Não foi possível alcançar este site. Verifique a conexão do PS5 ou se o endereço está correto e no ar."
+      : "Verificando se o site está acessível.";
+    errRetry.style.display = failed ? "" : "none";
+    errForce.style.display = failed ? "" : "none";
+    errBack.textContent = failed ? "Voltar" : "Cancelar";
+    setTimeout(function () {
+      try { (failed ? errRetry : errBack).focus(); } catch (e) {}
+    }, 30);
+  }
+
+  function hideErr() {
+    probeToken++;
+    clearTimeout(probeTimer);
+    err.className = "";
+  }
+
+  function visit(url) {
+    showErr("check", url);
+    if (typeof navigator.onLine !== "undefined" && navigator.onLine === false) {
+      showErr("fail", url);
+      return;
+    }
+    if (typeof fetch !== "function") { proceed(url); return; }
+
+    var token = ++probeToken, done = false;
+    function finish(ok) {
+      if (done || token !== probeToken) return;
+      done = true;
+      clearTimeout(probeTimer);
+      if (ok) proceed(url); else showErr("fail", url);
+    }
+    probeTimer = setTimeout(function () { finish(false); }, 8000);
+    try {
+      fetch(url, { mode: "no-cors", cache: "no-store" }).then(
+        function () { finish(true); },
+        function () { finish(false); }
+      );
+    } catch (e) {
+      finish(true);
+    }
+  }
+
+  errRetry.onclick = function () { visit(currentUrl); };
+  errForce.onclick = function () { proceed(currentUrl); };
+  errBack.onclick = hideErr;
+  document.onkeydown = function (e) {
+    if ((e.keyCode || e.which) === 27 && err.className === "show") hideErr();
+  };
+
+  /* ---------- Renderização ---------- */
+  function mkBtn(cls, text, label, fn) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = cls;
+    b.textContent = text;
+    b.title = label;
+    b.setAttribute("aria-label", label);
+    b.onclick = fn;
+    return b;
+  }
+
+  function makeItem(kind, i) {
+    var url = listOf(kind)[i];
+    var li = document.createElement("li");
+    li.className = "item";
+
+    if (editing[kind] === i) {
+      var inp = document.createElement("input");
+      inp.type = "text";
+      inp.className = "edit-input";
+      inp.value = url;
+      inp.setAttribute("autocapitalize", "off");
+      inp.setAttribute("autocomplete", "off");
+      inp.setAttribute("spellcheck", "false");
+
+      var commit = function () {
+        var nu = normalize(inp.value);
+        if (!nu) { toast("Endereço inválido"); return; }
+        var cur = listOf(kind);
+        for (var k = 0; k < cur.length; k++) {
+          if (k !== i && cur[k] === nu) { toast("Esse endereço já está na lista"); return; }
+        }
+        cur[i] = nu;
+        persist(kind);
+        editing[kind] = -1;
+        render(kind);
+        toast("Endereço alterado");
+      };
+      var cancel = function () { editing[kind] = -1; render(kind); };
+
+      inp.onkeydown = function (e) {
+        var key = e.keyCode || e.which;
+        if (key === 13) { e.preventDefault(); commit(); }
+        if (key === 27) { e.preventDefault(); cancel(); }
+      };
+
+      li.appendChild(inp);
+      li.appendChild(mkBtn("btn act ok", "Salvar", "Salvar alteração", commit));
+      li.appendChild(mkBtn("btn act", "Cancelar", "Cancelar edição", cancel));
+      setTimeout(function () { try { inp.focus(); } catch (e) {} }, 30);
+      return li;
+    }
+
+    var a = document.createElement("a");
+    a.className = "link";
+    a.href = url;
+    a.textContent = url;
+    a.onclick = function (e) {
+      e.preventDefault();
+      visit(url);
+    };
+    li.appendChild(a);
+
+    if (kind === "hist") {
+      var isFav = favs.indexOf(url) !== -1;
+      var star = document.createElement("button");
+      star.type = "button";
+      star.className = "btn act star" + (isFav ? " on" : "");
+      star.title = isFav ? "Já está nos favoritos" : "Adicionar aos favoritos";
+      star.setAttribute("aria-label", star.title);
+      star.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" fill="' + (isFav ? "currentColor" : "none") +
+        '" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>';
+      star.onclick = function () {
+        if (favs.indexOf(url) !== -1) { toast("Já está nos favoritos"); return; }
+        favs.push(url);
+        persist("fav");
+        render("fav");
+        toast("Adicionado aos favoritos");
+      };
+      li.appendChild(star);
+    }
+
+    li.appendChild(mkBtn("btn act edit", "Editar", "Editar endereço", function () {
+      editing[kind] = i;
+      render(kind);
+    }));
+    li.appendChild(mkBtn("btn act del", "Excluir", "Excluir", function () {
+      listOf(kind).splice(i, 1);
+      editing[kind] = -1;
+      persist(kind);
+      render(kind);
+      toast(kind === "fav" ? "Favorito removido" : "Removido do histórico");
+    }));
+    return li;
+  }
+
+  function histOpen() { return histSection.className.indexOf("hidden") === -1; }
+
+  function render(kind) {
+    renderList(kind);
+    if (kind === "fav" && histOpen()) renderList("hist");
+  }
+
+  function renderList(kind) {
+    var ul = kind === "fav" ? favList : histList;
+    var arr = listOf(kind);
+    ul.innerHTML = "";
+    if (!arr.length) {
+      var p = document.createElement("li");
+      p.className = "empty";
+      p.textContent = kind === "fav"
+        ? "Nenhum favorito ainda. Digite um endereço e toque em ⭐."
+        : "Nenhum site acessado ainda.";
+      ul.appendChild(p);
+      return;
+    }
+    for (var i = 0; i < arr.length; i++) ul.appendChild(makeItem(kind, i));
+  }
+
+  /* ---------- Ações ---------- */
+  function go() {
+    var url = normalize(input.value);
+    if (!url) { toast("Digite um endereço"); input.focus(); return; }
+    visit(url);
+  }
+
+  function addFav() {
+    var url = normalize(input.value);
+    if (!url) { toast("Digite um endereço para favoritar"); input.focus(); return; }
+    if (favs.indexOf(url) !== -1) { toast("Já está nos favoritos"); return; }
+    favs.push(url);
+    persist("fav");
+    render("fav");
+    toast("Adicionado aos favoritos ⭐");
+  }
+
+  function toggleHist() {
+    var open = histSection.className.indexOf("hidden") === -1;
+    editing.hist = -1;
+    if (open) {
+      histSection.className = "section hidden";
+      btnHist.className = "btn txt";
+    } else {
+      render("hist");
+      histSection.className = "section";
+      btnHist.className = "btn txt on";
+    }
+  }
+
+  $("btnGo").onclick = go;
+  $("btnFav").onclick = addFav;
+  btnHist.onclick = toggleHist;
+  input.onkeydown = function (e) {
+    var k = e.keyCode || e.which;
+    if (k === 13) { e.preventDefault(); go(); }
+  };
+
+  render("fav");
+
+  /* ---------- Vídeos de fundo em sequência ---------- */
+  var videos = ["background.mp4", "background2.mp4", "background3.mp4"];
+  var vid = $("bg");
+  var idx = 0, failures = 0;
+
+  function play(i) {
+    idx = i % videos.length;
+    vid.src = videos[idx];
+    vid.load();
+    var p = vid.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  vid.addEventListener("ended", function () { failures = 0; play(idx + 1); });
+  vid.addEventListener("error", function () {
+    failures++;
+    if (failures < videos.length) play(idx + 1);  // pula vídeo com problema
+  });
+
+  play(0);
+})();
+</script>
+</body>
+</html>
